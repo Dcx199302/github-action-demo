@@ -1,0 +1,39 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main # 将 'release' 替换为你的发布分支名称
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16' # 指定 Node.js 版本
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build project
+        run: npm run build # 替换为你的打包命令
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist # 替换为你的打包输出目录
+
+      - name: Create release version tag
+        id: create_tag
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          echo "Creating tag v${VERSION}"
+          git tag v${VERSION}
+          git push origin v${VERSION}
