@@ -9,7 +9,6 @@ import HelloWorld from './components/HelloWorld.vue'
 
     <div class="wrapper">
       <HelloWorld msg="You did it!" />
-      Hello Vue3!!
 
       <nav>
         <RouterLink to="/">Home</RouterLink>
